@@ -65,9 +65,9 @@ Recommended Vercel settings:
 - Install command if Root Directory is the repo root: `if [ -d frontend ]; then npm --prefix frontend ci; else npm ci; fi`.
 - Build command if Root Directory is the repo root: `if [ -d frontend ]; then npm --prefix frontend run build && rm -rf dist && cp -R frontend/dist dist; else npm run build; fi`.
 - Output directory: `dist`.
-- Environment variable: `VITE_API_BASE_URL=https://your-render-backend.onrender.com`.
+- Environment variable: leave `VITE_API_BASE_URL` empty unless you intentionally want direct browser calls to a different backend.
 
-If `VITE_API_BASE_URL` is not set, production frontend builds default to `https://recall-gpt.onrender.com`. Override it in Vercel if your Render backend URL changes.
+Vercel proxies `/api/*` to `https://recall-gpt.onrender.com/api/*`, so the browser calls the same Vercel origin and avoids CORS issues.
 
 The repo also includes a root `vercel.json`, so a Vercel project created from the repository root will still build and publish `frontend/dist`.
 

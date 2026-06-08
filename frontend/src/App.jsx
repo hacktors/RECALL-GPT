@@ -3,11 +3,11 @@ import ChatWorkspace from "./components/ChatWorkspace.jsx";
 import ContextDrawer from "./components/ContextDrawer.jsx";
 import DashboardSidebar from "./components/DashboardSidebar.jsx";
 
-const DEFAULT_PRODUCTION_API_BASE_URL = "https://recall-gpt.onrender.com";
-const API_BASE = (
-  import.meta.env.VITE_API_BASE_URL ||
-  (import.meta.env.PROD ? DEFAULT_PRODUCTION_API_BASE_URL : "")
-).replace(/\/$/, "");
+const CONFIGURED_API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+const API_BASE =
+  typeof window !== "undefined" && window.location.hostname.endsWith("vercel.app")
+    ? ""
+    : CONFIGURED_API_BASE;
 const LOCAL_REINDEX_PHASES = ["Scanning /doc...", "Extracting Layers...", "Syncing Embeddings..."];
 const CHROMA_SYNC_PHASES = [
   "Reading Chroma...",
@@ -21,12 +21,6 @@ export const ThemeContext = createContext({
 });
 
 function apiUrl(path) {
-  if (!API_BASE && import.meta.env.PROD) {
-    throw new Error(
-      "VITE_API_BASE_URL is not configured. Set it to your Render backend URL in Vercel."
-    );
-  }
-
   return `${API_BASE}${path}`;
 }
 
