@@ -58,9 +58,12 @@ For production RAG retrieval, connect Render to an external Chroma server or Chr
 Recommended Vercel settings:
 
 - Import this GitHub repository.
-- Set Root Directory to `frontend`.
+- Either leave Root Directory as the repository root, or set it to `frontend`.
 - Framework preset: Vite.
-- Build command: `npm run build`.
+- Install command if Root Directory is `frontend`: `npm ci`.
+- Build command if Root Directory is `frontend`: `npm run build`.
+- Install command if Root Directory is the repo root: `if [ -d frontend ]; then npm --prefix frontend ci; else npm ci; fi`.
+- Build command if Root Directory is the repo root: `if [ -d frontend ]; then npm --prefix frontend run build && rm -rf dist && cp -R frontend/dist dist; else npm run build; fi`.
 - Output directory: `dist`.
 - Environment variable: `VITE_API_BASE_URL=https://your-render-backend.onrender.com`.
 
