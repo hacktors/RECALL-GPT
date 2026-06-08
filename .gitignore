@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Production builds
+dist/
+build/
+
+# Local environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Local/runtime data
+backend/chroma-data/
+backend/doc/*
+!backend/doc/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Platform metadata
+.vercel/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: recall-gpt-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: FRONTEND_ORIGIN
+        sync: false
