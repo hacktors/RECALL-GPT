@@ -19,7 +19,7 @@ const localFrontendOrigins = [
   "http://localhost:4173",
   "http://127.0.0.1:4173"
 ];
-const fallbackProductionFrontendOrigins = ["https://*.vercel.app"];
+const hostedFrontendOrigins = ["https://recall-gpt.vercel.app", "https://*.vercel.app"];
 function originMatcher(value) {
   const normalized = String(value || "").trim().replace(/\/$/, "");
   if (!normalized) return null;
@@ -39,19 +39,26 @@ const configuredFrontendOrigins = (process.env.FRONTEND_ORIGIN || "")
   .split(",")
   .map((item) => item.trim())
   .filter(Boolean);
-const allowedOriginMatchers = (
-  process.env.NODE_ENV === "production"
-    ? [...fallbackProductionFrontendOrigins, ...configuredFrontendOrigins]
-    : [...localFrontendOrigins, ...configuredFrontendOrigins]
-)
+const allowedOriginMatchers = [
+  ...localFrontendOrigins,
+  ...hostedFrontendOrigins,
+  ...configuredFrontendOrigins
+]
   .map(originMatcher)
   .filter(Boolean);
+
+function isAllowedOrigin(origin) {
+  return !origin || allowedOriginMatchers.some((matcher) => matcher(origin));
+}
 
 app.use(helmet());
 app.use(
   cors({
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 204,
     origin(origin, callback) {
-      if (!origin || allowedOriginMatchers.some((matcher) => matcher(origin))) {
+      if (isAllowedOrigin(origin)) {
         return callback(null, true);
       }
       return callback(new Error(`CORS blocked origin: ${origin}`));
