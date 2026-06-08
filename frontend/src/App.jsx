@@ -3,7 +3,11 @@ import ChatWorkspace from "./components/ChatWorkspace.jsx";
 import ContextDrawer from "./components/ContextDrawer.jsx";
 import DashboardSidebar from "./components/DashboardSidebar.jsx";
 
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+const DEFAULT_PRODUCTION_API_BASE_URL = "https://recall-gpt.onrender.com";
+const API_BASE = (
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.PROD ? DEFAULT_PRODUCTION_API_BASE_URL : "")
+).replace(/\/$/, "");
 const LOCAL_REINDEX_PHASES = ["Scanning /doc...", "Extracting Layers...", "Syncing Embeddings..."];
 const CHROMA_SYNC_PHASES = [
   "Reading Chroma...",

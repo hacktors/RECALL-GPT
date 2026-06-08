@@ -39,7 +39,7 @@ The frontend defaults to `http://localhost:5173` and the backend defaults to `ht
 The repo includes `render.yaml` for a Render web service:
 
 - Root directory: `backend`
-- Build command: `npm ci`
+- Build command: `npm ci && npm run build`
 - Start command: `npm start`
 - Health check path: `/api/health`
 
@@ -49,7 +49,7 @@ Required Render environment variables:
 - `GEMINI_API_KEY`
 - `FRONTEND_ORIGIN`, for example `https://your-vercel-app.vercel.app`
 
-For first deployment, `FRONTEND_ORIGIN` can also use a Vercel wildcard such as `https://*.vercel.app`; replace it with the exact Vercel production URL after deployment for tighter CORS.
+Production CORS allows Vercel deployments by default with `https://*.vercel.app` and also allows any origins listed in `FRONTEND_ORIGIN`.
 
 For production RAG retrieval, connect Render to an external Chroma server or Chroma Cloud by setting the matching variables from `backend/.env.example`. Without a reachable Chroma service, the backend still deploys and `/api/health` works, but retrieval endpoints report Chroma as offline.
 
@@ -64,7 +64,7 @@ Recommended Vercel settings:
 - Output directory: `dist`.
 - Environment variable: `VITE_API_BASE_URL=https://your-render-backend.onrender.com`.
 
-Do not leave `VITE_API_BASE_URL` blank in Vercel production. Local development can use the Vite proxy, but the deployed frontend must call the deployed Render backend directly.
+If `VITE_API_BASE_URL` is not set, production frontend builds default to `https://recall-gpt.onrender.com`. Override it in Vercel if your Render backend URL changes.
 
 The repo also includes a root `vercel.json`, so a Vercel project created from the repository root will still build and publish `frontend/dist`.
 

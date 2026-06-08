@@ -19,6 +19,7 @@ const localFrontendOrigins = [
   "http://localhost:4173",
   "http://127.0.0.1:4173"
 ];
+const fallbackProductionFrontendOrigins = ["https://*.vercel.app"];
 function originMatcher(value) {
   const normalized = String(value || "").trim().replace(/\/$/, "");
   if (!normalized) return null;
@@ -40,7 +41,7 @@ const configuredFrontendOrigins = (process.env.FRONTEND_ORIGIN || "")
   .filter(Boolean);
 const allowedOriginMatchers = (
   process.env.NODE_ENV === "production"
-    ? configuredFrontendOrigins
+    ? [...fallbackProductionFrontendOrigins, ...configuredFrontendOrigins]
     : [...localFrontendOrigins, ...configuredFrontendOrigins]
 )
   .map(originMatcher)
